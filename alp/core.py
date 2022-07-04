@@ -21,7 +21,8 @@ def bundle():
 
     infoPath = os.path.abspath("./info.plist")
     if os.path.exists(infoPath):
-        info = plistlib.readPlist(infoPath)
+        with open(infoPath, 'rb') as fp:
+            info = plistlib.load(fp)
         try:
             gBundleID = info["bundleid"]
         except KeyError:
@@ -77,21 +78,6 @@ def storage(join=None):
         nvPath = os.path.join(nvPath, join)
 
     return nvPath
-
-
-def readPlist(path):
-    if os.path.isabs(path):
-        return plistlib.readPlist(path)
-    else:
-        return plistlib.readPlist(storage(path))
-
-
-def writePlist(obj, path):
-    if os.path.isabs(path):
-        plistlib.writePlist(obj, path)
-    else:
-        plistlib.writePlist(obj, storage(path))
-
 
 def jsonLoad(path):
     if not os.path.isabs(path):
